@@ -1,0 +1,227 @@
+# CatBoost начальное приближение
+Results: 
+Learning rate set to 0.046836
+			precision    recall  f1-score   support
+
+           0		       0.99      0.92      0.96     14636
+           1		       0.10      0.55      0.17       230
+
+    accuracy		                           0.92     14866
+   macro avg	       0.55      0.74      0.56     14866
+weighted avg	       0.98      0.92      0.94     14866
+
+
+# Catboost с подбором параметров и оптимизацией порога по F1
+Results: 
+Лучшие параметры: {'classifier__depth': 8, 'classifier__l2_leaf_reg': 3, 'classifier__learning_rate': 0.1}
+
+ 	             	precision    recall  f1-score   support
+
+           0		       0.99      0.98      0.99     14636
+           1		       0.20      0.30      0.24       230
+
+    accuracy		                           0.97     14866
+   macro avg	       0.60      0.64      0.61     14866
+weighted avg	       0.98      0.97      0.97     14866
+
+ROC-AUC: 0.8183
+PR-AUC: 0.2259
+
+Оптимизированный порог: 0.7265
+ 	             precision    recall  f1-score   support
+
+           0	       0.99      0.99      0.99     14636
+           1	       0.34      0.27      0.30       230
+
+    accuracy	                           0.98     14866
+   macro avg       0.66      0.63      0.64     14866
+weighted avg       0.98      0.98      0.98     14866
+
+
+# Рабочий простой Catboost + несложная кросвалидация
+Results:
+Classification Report:
+  	            	precision    recall  f1-score   support
+
+           0	       0.99      0.92      0.96     14636
+           1	       0.10      0.55      0.17       230
+
+    accuracy		                    0.92     14866
+   macro avg       0.55      0.74      0.56     14866
+weighted avg       0.98      0.92      0.94     14866
+
+ROC-AUC: 0.8572
+
+Feature Importances:
+         Feature  Importance
+0    nkoAge_days   31.880986
+1     regionCode   22.940686
+2    minjustForm   17.979429
+3  mainOkvedCode    8.416631
+
+
+# LogisticRegression, RandomForestClassifier, GradientBoostingClassifier, SVC
+# Вариант KFold
+Results:
+
+Результаты кросс-валидации:
+ 		                           accuracy	        precision		  recall  \			
+Logistic Regression		  0.8101 ± 0.0191  0.0581 ± 0.0042  0.7373 ± 0.0146   
+Random Forest		          0.8856 ± 0.0047  0.0811 ± 0.0039  0.6196 ± 0.0112   
+Gradient Boosting	          0.9827 ± 0.0006  0.2797 ± 0.0400  0.0732 ± 0.0076   
+SVM 		                  0.8114 ± 0.0027  0.0597 ± 0.0012  0.7608 ± 0.0188   
+
+ 	                                 f1		  
+Logistic Regression  0.1077 ± 0.0072 
+Random Forest        0.1435 ± 0.0063 
+Gradient Boosting    0.1155 ± 0.0104
+SVM	                       0.1108 ± 0.0023
+
+Top 20 features by impact (Logistic Regression):
+          Feature		  Coefficient  Odds_Ratio
+14  regionCode_12     2.481273   11.956479
+7   regionCode_05     2.403492   11.061731
+8   regionCode_06     1.563521    4.775606
+0     nkoAge_days     0.763744    2.146297
+3   regionCode_01     0.552516    1.737619
+2   regionCode_00     0.418288    1.519358
+13  regionCode_11     0.391849    1.479715
+4   regionCode_02     0.229327    1.257753
+1   addOkvedCount     0.061554    1.063488
+15  regionCode_13    -0.144352    0.865583
+12  regionCode_10    -0.311159    0.732597
+10  regionCode_08    -0.888628    0.411220
+5   regionCode_03    -0.959884    0.382937
+11  regionCode_09    -1.116835    0.327314
+6   regionCode_04    -1.351015    0.258977
+9   regionCode_07    -1.455250    0.233342
+
+
+
+# CatBoost + Кросс-валидация + оптимизация порога вероятности отнесения к классам.
+Results:
+CatBoost Classification Report:
+              		precision    recall  f1-score   support
+
+           0	       0.99      0.93      0.96     14636
+           1	       0.10      0.53      0.17       230
+
+    accuracy	                           0.92     14866
+   macro avg       0.55      0.73      0.56     14866
+weighted avg       0.98      0.92      0.95     14866
+
+ROC-AUC: 0.8696
+
+Optimized Threshold 0.9248 Report:
+              		precision    recall  f1-score   support
+
+           0	       0.99	      1.00       0.99       14636
+           1	       0.51	      0.24       0.33        230
+
+    accuracy	                           0.98     14866
+   macro avg       0.75      0.62      0.66     14866
+weighted avg       0.98      0.98      0.98     14866
+
+
+Top 20 Important Features:
+              Feature  Importance
+0         nkoAge_days   33.679960
+1          regionCode   22.890880
+2       mainOkvedCode   16.870777
+5         minjustForm   16.789773
+3       addOkvedCount    9.527119
+4  hasRegionalSupport    0.241492
+
+
+
+# Первое приближение
+# LogisticRegression, RandomForestClassifier, GradientBoostingClassifier, SVC
+# Анализ важности признаков (на примере Random Forest)
+Results:
+		                     Accuracy  Precision    Recall        F1   ROC-AUC
+Logistic Regression  0.813669   0.061464  0.773913  0.113884  0.846673
+Random Forest        0.974573   0.144231  0.130435  0.136986  0.708669
+Gradient Boosting    0.984327   0.363636  0.017391  0.033195  0.883196
+SVM	                       0.808153   0.060657  0.786957  0.112632  0.864167
+
+Top 20 features by impact (Logistic Regression):
+ 	         Feature     Coefficient  Odds_Ratio
+14  regionCode_13     2.481273   11.956479
+7   regionCode_06     2.403492   11.061731
+8   regionCode_07     1.563521    4.775606
+0     nkoAge_days     0.763744    2.146297
+3   regionCode_02     0.552516    1.737619
+2   regionCode_01     0.418288    1.519358
+13  regionCode_12     0.391849    1.479715
+4   regionCode_03     0.229327    1.257753
+1   regionCode_00     0.061554    1.063488
+15  regionCode_14    -0.144352    0.865583
+12  regionCode_11    -0.311159    0.732597
+10  regionCode_09    -0.888628    0.411220
+5   regionCode_04    -0.959884    0.382937
+11  regionCode_10    -1.116835    0.327314
+6   regionCode_05    -1.351015    0.258977
+9   regionCode_08    -1.455250    0.233342
+
+# SVC c подбором суперпараметров + оптимизация порога (500 минут)
+Results:
+Лучшие параметры: {'classifier__C': 100, 'classifier__class_weight': {0: 1, 1: 5}, 'classifier__gamma': 'scale', 'classifier__kernel': 'rbf'}
+
+Classification Report:
+  	           	 precision    recall  f1-score   support
+
+           0		       0.99      0.99      0.99     14636
+           1		       0.21      0.20      0.21       230
+
+    accuracy		                           0.98     14866
+   macro avg	       0.60      0.60      0.60     14866
+weighted avg	       0.98      0.98      0.98     14866
+
+ROC-AUC: 0.7817
+
+Optimized Threshold (0.0160) Report:
+  		            precision    recall  f1-score   support
+
+           0		       0.99      0.98      0.99     14636
+           1		       0.19      0.26      0.22       230
+
+    accuracy		                           0.97     14866
+   macro avg	       0.59      0.62      0.60     14866
+weighted avg	       0.98      0.97      0.97     14866
+
+
+# RandomForestClassifier + SMOTE (сэмплирование, борьба с дисбалансом)
+Results:
+Classification Report:
+          	   	      precision    recall  f1-score   support
+
+           0		       0.99      0.86      0.92     14636
+           1		       0.07      0.69      0.13       230
+
+    accuracy		                           0.86     14866
+   macro avg	       0.53      0.78      0.53     14866
+weighted avg	       0.98      0.86      0.91     14866
+
+
+ROC-AUC Score: 0.8648016504865905
+
+Top 15 Important Features:
+     			                                         Feature		  Importance
+7        minjustForm_Товарищество собственников жилья    0.256492
+0                                         nkoAge_days				    0.214089
+1                                       addOkvedCount			    0.078929
+15                                        egrulStatus				    0.059407
+4                minjustForm_Общественная организация	    0.051017
+8                              minjustForm_Учреждение			    0.050657
+13                                mainOkvedCode_94.99			    0.042863
+10                              mainOkvedCode_68.32.1			    0.040034
+6   minjustForm_Садоводческие, огороднические, дач...      0.039955
+9                                   mainOkvedCode_0.0			    0.031695
+11                              mainOkvedCode_68.32.2			    0.031045
+2                                       regionCode_77				    0.024912
+3   minjustForm_Автономная некоммерческая организация    0.023914
+5                   minjustForm_Профессиональный союз	    0.022446
+14                                 hasRegionalSupport			    0.016622
+
+
+
